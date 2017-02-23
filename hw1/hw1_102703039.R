@@ -1,5 +1,7 @@
 ########################
-# homework1 example
+# homework1
+# GOAL: Get the max value and output new table.
+# DATE: 17/02/23
 ########################
 
 args = commandArgs(trailingOnly=TRUE)
