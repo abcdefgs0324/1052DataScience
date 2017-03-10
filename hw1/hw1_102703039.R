@@ -14,10 +14,10 @@ if (length(args) < 4) {
     # get input/output file
     for (i in c(1:length(args))) {
         if (args[i] == '-files') {
-            input_file = args[i+1]
+            input_file <- args[i+1]
         }
         else if (args[i] == '-out') {
-            output_file = args[i+1]
+            output_file <- args[i+1]
         }
     }
     if (input_file == '' || output_file == '') {
