@@ -21,7 +21,7 @@ if (length(args) < 4) {
         }
     }
     if (input_file == '' || output_file == '') {
-        stop("USAGE: Rscript hw1_102703039.R -files input -out result", call.=FALSE)
+        stop("USAGE: Rscript hw1_102703039.R -files [input-file] -out [result-file]", call.=FALSE)
     }
     if (!file.exists(input_file)) {
         stop("ERROR: No such input file, please check it.")
