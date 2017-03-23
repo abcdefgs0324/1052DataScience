@@ -1,3 +1,9 @@
+########################
+# homework2
+# GOAL: Accumulate sensitivity, specificity, F1 score and AUC for several input files.
+# DATE: 17/03/24
+########################
+
 query_func<-function(query_m, i)
 {
   if(query_m == "male"){
@@ -13,7 +19,7 @@ query_func<-function(query_m, i)
 # read parameters
 args = commandArgs(trailingOnly=TRUE)
 if (length(args)==0) {
-  stop("USAGE: Rscript hw1.R -query min|max -files file1 file2 ... filen –out out.csv", call.=FALSE)
+  stop("USAGE: Rscript hw2_102703039.R --target male/female --files file1 file2 ... filen –out out.csv", call.=FALSE)
 }
 
 # parse parameters
