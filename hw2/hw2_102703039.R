@@ -1,87 +1,61 @@
-########################
-# homework2
-# GOAL: Get the max value from several tables and output new table.
-# DATE: 17/03/11
-########################
+query_func<-function(query_m, i)
+{
+  if(query_m == "male"){
+    which.min(i)
+  }
+  else if (query_m == "female") {
+    which.max(i)
+  } else {
+    stop(paste("ERROR: unknown query function", query_m))
+  }
+}
 
+# read parameters
 args = commandArgs(trailingOnly=TRUE)
-input_files <- c()
-output_file <- c()
-
-if (length(args) < 4) {
-    stop("USAGE: Rscript hw2_102703039.R -files [input-files] -out [result-file]", call.=FALSE)
-} else {
-    # get input/output file
-    for (i in c(1:length(args))) {
-        if (args[i] == '-files') {
-            j <- i+1
-            while (j < length(args)+1 && args[j] != '-out') {
-                input_files <- append(input_files, args[j])
-                j <- j + 1
-            }
-        }
-        else if (args[i] == '-out') {
-            output_file <- args[i+1]
-        }
-    }
-    if (is.null(input_files) || is.null(output_file)) {
-        stop("USAGE: Rscript hw2_102703039.R -files [input-files] -out [result-file]", call.=FALSE)
-    }
-    for (input in input_files) {
-        if (!file.exists(input)) {
-            stop("ERROR: No such input file, please check it.")
-        }
-    }
+if (length(args)==0) {
+  stop("USAGE: Rscript hw1.R -query min|max -files file1 file2 ... filen –out out.csv", call.=FALSE)
 }
 
-# define the function getting the max value
-getMax <- function (data) {
-    max <- data[1]
-    for (i in c(2:length(data))) {
-        if (data[i] > max) {
-            max <- data[i]
-        }
-    }
-    return(round(max, 2))
+# parse parameters
+i<-1
+while(i < length(args))
+{
+  if(args[i] == "-query"){
+    query_m<-args[i+1]
+    i<-i+1
+  }else if(args[i] == "-files"){
+    j<-grep("-", c(args[(i+1):length(args)], "-"))[1]
+    files<-args[(i+1):(i+j-1)]
+    i<-i+j-1
+  }else if(args[i] == "-out"){
+    out_f<-args[i+1]
+    i<-i+1
+  }else{
+    stop(paste("Unknown flag", args[i]), call.=FALSE)
+  }
+  i<-i+1
 }
 
-# define the function getting the index of the max value
-getMaxIndex <- function (data) {
-    index <- 1
-    for (i in c(2:length(data))) {
-        if (data[i] > data[index]) {
-            index <- i
-        }
-    }
-    return(index)
+print("PROCESS")
+print(paste("query mode :", query_m))
+print(paste("output file:", out_f))
+print(paste("files      :", files))
+
+# read files
+names<-c()
+weis<-c()
+heis<-c()
+for(file in files)
+{
+  name<-gsub(".csv", "", basename(file))
+  d<-read.table(file, header=T,sep=",")
+  weis<-c(weis, d$weight[query_func(query_m, d$weight)])
+  heis<-c(heis, d$height[query_func(query_m, d$height)])
+  names<-c(names,name)
 }
+out_data<-data.frame(set=names, wei=weis, hei=heis, stringsAsFactors = F)
+index<-sapply(out_data[,c("wei","hei")], query_func, query_m=query_m)
 
-# initialize result list
-setName <- c()
-maxWeight <- c()
-maxHeight <- c()
-
-for (input in input_files) {
-    # read file
-    data <- read.csv(input, header=TRUE, sep=',')
-
-    # accumulate max values
-    setName <- append(setName, sub('.csv$', '', input))
-    maxWeight <- append(maxWeight, getMax(data[,'weight']))
-    maxHeight <- append(maxHeight, getMax(data[,'height']))
-}
-
-# conclude the result
-setName <- append(setName, 'max')
-maxWeight <- append(maxWeight, sub('.csv$', '', input_files[getMaxIndex(maxWeight)]))
-maxHeight <- append(maxHeight, sub('.csv$', '', input_files[getMaxIndex(maxHeight)]))
-
-set <- c(setName)
-weight <- c(maxWeight)
-height <- c(maxHeight)
-
-data <- data.frame(set, weight, height)
-
-# write file
-write.csv(data, file=output_file, row.names=FALSE, quote=FALSE)
-
+# output file
+out_data<-rbind(out_data,c(query_m,names[index]))
+write.table(out_data, file=out_f, row.names = F, quote = F)
