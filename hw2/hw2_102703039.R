@@ -1,6 +1,6 @@
 ########################
 # homework2
-# GOAL: Accumulate sensitivity, specificity, F1 score and AUC for several input files.
+# GOAL: Calculate sensitivity, specificity, F1 score and AUC for several input files.
 # DATE: 17/03/25
 ########################
 
