@@ -61,7 +61,7 @@ buildContingencyTable <- function(index_1, index_2, target, oppo, files, names) 
 # read parameters
 args = commandArgs(trailingOnly=TRUE)
 if (length(args)==0) {
-    stop("USAGE: Rscript hw2_102703039.R --target male/female --files file1 file2 ... filen –-out out.csv", call.=FALSE)
+    stop("USAGE: Rscript hw3_102703039.R --target male/female --files file1 file2 ... filen –-out out.csv", call.=FALSE)
 }
 
 library("ROCR")
