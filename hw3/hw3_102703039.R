@@ -6,7 +6,7 @@
 
 query_func <- function(query_m, i)
 {
-    if(query_m == "male"){
+    if (query_m == "male"){
         which.max(i)
     }
     else if (query_m == "female") {
@@ -40,6 +40,22 @@ getF1Score <- function(conf, target, oppo) {
 
 getAUC <- function(scores, refs) {
     return(attributes(performance(prediction(scores, refs), "auc"))$y.values[[1]])
+}
+
+getSecondIndex <- function (vec) {
+    print(vec)
+    len <- length(vec)
+    return(as.integer(sapply(sort(vec, index.return=TRUE), `[`, length(vec)-2+1)['ix']))
+}
+
+buildContingencyTable <- function(index_1, index_2, target, oppo, files, names) {
+    d <- read.table(files[index_1], header=T, sep=",")
+    list_1 <- d$prediction
+    d <- read.table(files[index_2], header=T, sep=",")
+    list_2 <- d$prediction
+    tag1 <- names[index_1]
+    tag2 <- names[index_2]
+    return(table(tag1=list_1, tag2=list_2))
 }
 
 # read parameters
@@ -109,10 +125,26 @@ for(file in files)
     aucs <- c(aucs, auc)
 }
 
+# find first method and second method
+firstIndex <- query_func(query_m, f1s)
+secondIndex <- getSecondIndex(f1s)
+
+# build contingency table
+contTable <- buildContingencyTable(firstIndex, secondIndex, query_m, oppo, files, names)
+
+# calculate p-value
+p_value <- fisher.test(contTable)['p.value']
+
 # conclude the result
 out_data <- data.frame(method=names, sensitivity=sens, specificity=spes, F1=f1s, AUC=aucs, stringsAsFactors = F)
+print(out_data)
 index <- sapply(out_data[, c("sensitivity", "specificity", "F1", "AUC")], query_func, query_m=query_m)
-out_data<-rbind(out_data, c("highest", names[index]))
+out_data <- rbind(out_data, c("highest", names[index]))
+
+# if p < 0.05, mark it
+if (p_value < 0.05) {
+    out_data[length(files)+1,"F1"] <- paste(out_data[length(files)+1,"F1"], "*", sep="")
+}
 
 # output file
 write.table(out_data, file=out_f, row.names=F, quote=F, sep=",")
