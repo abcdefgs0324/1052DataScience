@@ -113,10 +113,7 @@ for(file in files)
     sen <- round(getSensitivity(confMatrix, query_m, oppo), 2)
     spe <- round(getSpecificity(confMatrix, query_m, oppo), 2)
     f1 <- round(getF1Score(confMatrix, query_m, oppo), 2)
-    if (query_m == "male")
-        auc <- round(getAUC(d$pred.score, d$reference), 2)
-    else
-        auc <- round(getAUC(1 - d$pred.score, d$reference), 2)
+    auc <- round(getAUC(d$pred.score, d$reference), 2)
 
     # append result
     sens <- c(sens, sen)
