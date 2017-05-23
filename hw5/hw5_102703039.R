@@ -29,6 +29,9 @@ while(i < length(args)) {
 input <- "Archaeal_tfpssm.csv"
 data <- read.csv(input, header=F)
 
+# remove duplicate rows
+data <- data[!duplicated(data), ]
+
 # divide data into several groups
 folds <- list()
 rowCount <- nrow(data)
