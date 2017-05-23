@@ -6,8 +6,8 @@
 
 # read parameters
 args = commandArgs(trailingOnly=TRUE)
-if (length(args)==0) {
-    stop("USAGE: Rscript hw5_102703039.R -fold n -out performance.csv", call.=FALSE)
+if (length(args) < 4) {
+    stop("USAGE: Rscript hw5_102703039.R --fold n --out performance.csv", call.=FALSE)
 }
 
 # parse parameters
