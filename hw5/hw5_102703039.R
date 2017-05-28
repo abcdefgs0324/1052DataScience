@@ -4,6 +4,8 @@
 # DATE: 17/05/23
 ########################
 
+# select knn as my model to predict
+
 # read parameters
 args = commandArgs(trailingOnly=TRUE)
 if (length(args) < 4) {
@@ -41,7 +43,7 @@ for (i in c(1:n)) {
 
 require(class)
 
-K <- 3 # for knn
+K <- 13 # for knn
 trainAccu <- 0
 validAccu <- 0
 testAccu <- 0
