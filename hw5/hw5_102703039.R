@@ -15,10 +15,10 @@ if (length(args) < 4) {
 # parse parameters
 i <- 1
 while(i < length(args)) {
-    if(args[i] == "--fold"){
+    if(args[i] == "-fold"){
         n <- as.numeric(args[i+1])
         i <- i+1
-    }else if(args[i] == "--out"){
+    }else if(args[i] == "-out"){
         out_f <- args[i+1]
         i <- i+1
     }else{
