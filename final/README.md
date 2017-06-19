@@ -66,12 +66,17 @@ Notes: Can check `./final/input/conf-*.csv` for confusion matrix.
 <br>
 
 ### Code Usage
-Run the code by following commands
+Run the code by following commands.
 ```
 $ cat creditcard2.csv >> creditcard.csv
 $ Rscript fraud_102703039.R [-o]
 ```
 -o: do not drop any column(original features).
+<br><br>
+Remember to copy the data to visualization folder if you want to try the ShinyApps on your machine by the following command.
+```
+$ cp creditcard.csv final/input/
+```
 
 
 <br>
